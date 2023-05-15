@@ -15,7 +15,7 @@ class Plugin:
         result = list()
         while True:
             try:
-                f = open("term_bank_" + str(j) + ".json")
+                f = open("assets/term_bank_" + str(j) + ".json")
                 data = json.load(f)
                 for i in data:
                     if i[0].startswith(text):

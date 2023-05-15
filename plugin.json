@@ -1,6 +1,6 @@
 {
-  "name": "Example Plugin",
-  "author": "John Doe",
+  "name": "DictOnDeck",
+  "author": "Joseph O'Malley",
   "flags": ["debug", "_root"],
   "publish": {
     "tags": ["template", "root"],
