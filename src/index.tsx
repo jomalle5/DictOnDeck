@@ -11,10 +11,10 @@ import {
   useState,
 } from "react";
 import { FaShip } from "react-icons/fa";
-import SearchManager from "./SearchManager"
+import * as backend from './backend';
+import {openTextModal} from './Components/TextModal'
 {/*
   TODO:
-    >Promise probably not necessary for showing the modal (the calling component is unrendered so it can't use that data anyways)
     >Pick a way to store the state of query in between component loads and unloads
       Could store it in the backend since py code is live the whole time the plugin is mounted
       Could write it to disk
@@ -25,31 +25,32 @@ import SearchManager from "./SearchManager"
     >Order dictionaries entries in some way, probably by commoness (word rarity may be included in the dictionary)
     >Look at dictionaries other than JMDict_English, their definitions would need to be cleaned up after being read
 */}
-const Content: VFC<{ serverAPI: ServerAPI }> = ({}) => {
-  const searchmanager = new SearchManager()
+
+const Content: VFC<{ serverAPI: ServerAPI}> = () => {
+
   const [text, setText] = useState("")
   const [count, setCount] = useState(0)
+  backend.resolvePromise(backend.getQuery(), setText)
   return (
       <PanelSection>
         <ButtonItem
-          onClick = {async () => { await searchmanager.openTextModal(text)
-            .then((val) => setText(val))
-            .catch((val) => {setText(val)}) }
-          }
+            onClick = {async () => {let data = await openTextModal(text); setText(data)}}
         >
-          {text}</ButtonItem>
-        {text}
+        Search...
+        </ButtonItem>
         <TextField
           value ={text}
           onKeyDown = {(e) => {if (e.key === 'Enter') setCount(count + 1)}}
           onChange={(e) => e.target.value && setText(e.target.value)}
+          
         />
-        Submitted {count} times
+        Submitted {count} times {text}
       </PanelSection>
   );
 };
 
 export default definePlugin((serverApi: ServerAPI) => {
+  backend.setServer(serverApi)
   return {
     title: <div className={staticClasses.Title}>DictOnDeck</div>,
     content: <Content serverAPI={serverApi}/>,
@@ -57,5 +58,6 @@ export default definePlugin((serverApi: ServerAPI) => {
     onDismount() {
 
     },
+    alwaysRender: true
   };
 });
