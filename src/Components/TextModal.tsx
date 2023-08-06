@@ -1,7 +1,7 @@
-import { TextField, ButtonItem, PanelSection, ModalRoot, showModal} from 'decky-frontend-lib'
+import { TextField, ButtonItem, ModalRoot, showModal} from 'decky-frontend-lib'
 import { FunctionComponent, useState } from 'react'
 
-export function openTextModal( startText: string,): 
+export function openTextModal( startText: string): 
   Promise<string> {
     return new Promise((resolve,reject) => {
       const Modal = ({closeModal}: {closeModal?: () => void}) => (
@@ -37,10 +37,19 @@ const TextModal: FunctionComponent<TextModalProps> = ({
     <div>
       <TextField
         value = {text}
-        onChange = {(e) => e.target.value && setText(e.target.value)}
+        onChange = {(e) => setText(e?.target.value)}
         onKeyDown = {(e) => {if (e.key === 'Enter') {onSubmit(text); closeModal?.()}}}
+        focusOnMount = {true}
+        rangeMin={0}
         />
-      <PanelSection>
+      <div
+        style= {{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '10px',
+          flexDirection: 'row'
+        }}
+      >
         <ButtonItem
           onClick = {() => {
             onSubmit(text);
@@ -54,7 +63,7 @@ const TextModal: FunctionComponent<TextModalProps> = ({
           >
           Close
         </ButtonItem>
-      </PanelSection>
+      </div>
     </div>
     );
 };
