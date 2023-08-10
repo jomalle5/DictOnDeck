@@ -1,4 +1,4 @@
-import { PanelSectionRow, ProgressBar, ServerAPI } from 'decky-frontend-lib'
+import {ProgressBar, ServerAPI } from 'decky-frontend-lib'
 import {VFC, useState, useEffect} from 'react'
 import {Entry} from './Entry'
 import {DictEntry} from '../types'
@@ -12,10 +12,10 @@ interface SearchMethodArgs {
     text: string
 }
 
-export const ResultList: VFC<ResultListProps> = (
-    {serverAPI},
-    {searchText}
-) => {
+export const ResultList: VFC<ResultListProps> = ({
+    serverAPI,
+    searchText
+}) => {
     const [entries, setEntries] = useState<DictEntry[]>([])
     const [loading, setLoading] = useState(false)
 
@@ -31,14 +31,15 @@ export const ResultList: VFC<ResultListProps> = (
         getEntries()
     }, [searchText])
 
-    if (!loading) {
-        return(
-            <ul>
-                {entries?.map((entry) => {
-                    return (<Entry entry={entry}/>)
-                })}
-            </ul>
-        )
+    if (loading) {
+        return(<ProgressBar indeterminate={true}/>)
     }
-    return(<p>Loading</p>)
+
+    return(
+        <ul>
+            {entries?.map((entry) => {
+                return (<Entry entry={entry}/>)
+            })}
+        </ul>
+    )
 }

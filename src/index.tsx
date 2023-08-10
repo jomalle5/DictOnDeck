@@ -33,8 +33,8 @@ const Content: VFC<{ serverAPI: ServerAPI }> = ({serverAPI}) => {
         }}/>
       <Button onClick={() => {setSearchText(text); toggleSearched(true);}}></Button>
       {searched ? 
-      <ResultList serverAPI={serverAPI} searchText={searchText}/> :
-      <div>Search...</div>}
+        <ResultList serverAPI={serverAPI} searchText={searchText}/> :
+        <div>Search...</div>}
     </PanelSection>
   );
 };
