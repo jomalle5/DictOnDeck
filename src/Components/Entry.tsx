@@ -1,4 +1,4 @@
-import {Field, Focusable, gamepadDialogClasses} from 'decky-frontend-lib'
+import {Field, Focusable} from 'decky-frontend-lib'
 import { VFC } from 'react'
 import { DictEntry } from '../types'
 
@@ -9,9 +9,23 @@ export const Entry: VFC<EntryProps> = ({
     entry
 }) => {
     return(
-        <Focusable>
-            <Field label={entry.expression} className = {gamepadDialogClasses.Field} childrenLayout='below' highlightOnFocus={true} focusable={true}>
-                {entry.reading}
+        <Focusable
+            style={{
+                width: '100%',
+                margin: 0,
+                padding: 0
+            }}
+        >
+            <Field
+                focusable={true}
+                highlightOnFocus={true}
+                padding='standard'
+                spacingBetweenLabelAndChild="none"
+                label={entry.expression}
+                description={entry.glossary[0]}
+                childrenContainerWidth='min'
+            >
+                {"("+entry.reading+")"}
             </Field>
         </Focusable>
     )

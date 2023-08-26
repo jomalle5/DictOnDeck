@@ -21,7 +21,7 @@ class Plugin:
     # A normal method. It can be called from JavaScript using call_plugin_function("method_1", argument1, argument2)
     async def add(self, left, right):
         return "hello world"
-    # ["お守り","おまもり","n","",708,["charm","amulet"],1002060,"P ichi news"]
+
     async def search(self, text):
         entries = list()
         i = 1
@@ -30,10 +30,21 @@ class Plugin:
                 with open(os.path.join(decky_plugin.DECKY_PLUGIN_RUNTIME_DIR, "term_bank_" + str(i) + ".json"), "r") as f:
                     data = json.load(f)
                     for entry in data:
+                        found = False
                         if entry[0].startswith(text):
-                            entries.append(Entry(entry[0],entry[1],entry[2],entry[3],entry[4],entry[5],entry[6],entry[7]))
+                            for e in entries:
+                                if entry[0] == e.expression and entry[1] == e.reading:
+                                    e.glossary += entry[5]
+                                    found = True
+                            if not found:
+                                entries.append(Entry(entry[0],entry[1],entry[2],entry[3],entry[4],entry[5],entry[6],entry[7]))
                         elif entry[1].startswith(text):
-                            entries.append(Entry(entry[0],entry[1],entry[2],entry[3],entry[4],entry[5],entry[6],entry[7]))
+                            for e in entries:
+                                if entry[0] == e.expression and entry[1] == e.reading:
+                                    e.glossary += entry[5]
+                                    found = True
+                            if not found:
+                                entries.append(Entry(entry[0],entry[1],entry[2],entry[3],entry[4],entry[5],entry[6],entry[7]))
                     i += 1
             except OSError as error:
                 break
